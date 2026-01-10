@@ -13,6 +13,7 @@
       "@config/*": ["src/config/*"],
       "@models/*": ["src/models/*"],
       "@schemas/*": ["src/schemas/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@errors/*": ["src/errors/*"],
       "@routes/*": ["src/routes/*"],
       "@controllers/*": ["src/controllers/*"],

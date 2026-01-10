@@ -3,6 +3,7 @@ import { FastifyInstance } from "fastify";
 import { userIdParamSchema, userPayloadSchema } from "@schemas/user.js";
 import { UserPayload } from "@models/user.js";
 import { UserController } from "@controllers/user.js";
+import { authenticateToken } from "@hooks/authenticateToken.js";
 
 export interface UserRoutes {
   initRoutes(app: FastifyInstance): void;
@@ -30,14 +31,23 @@ export class DefaultUserRoutes implements UserRoutes {
     );
 
     // Fetches all available users
-    app.get("/api/users", (_, reply) => {
-      this.controller.getAllUsers(reply);
-    });
+    app.get(
+      "/api/users",
+      {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
+      },
+      (_, reply) => {
+        this.controller.getAllUsers(reply);
+      }
+    );
 
     // Fetches one user by a given id after validating the query parameter
     app.get<{ Params: { id: string } }>(
       "/api/users/:id",
       {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
         schema: {
           params: userIdParamSchema,
         },
@@ -51,6 +61,8 @@ export class DefaultUserRoutes implements UserRoutes {
     app.post<{ Body: UserPayload }>(
       "/api/users",
       {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
         schema: {
           body: userPayloadSchema,
         },
@@ -64,6 +76,8 @@ export class DefaultUserRoutes implements UserRoutes {
     app.put<{ Params: { id: string }; Body: UserPayload }>(
       "/api/users/:id",
       {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
         schema: {
           params: userIdParamSchema,
           body: userPayloadSchema,
@@ -78,6 +92,8 @@ export class DefaultUserRoutes implements UserRoutes {
     app.delete<{ Params: { id: string } }>(
       "/api/users/:id",
       {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
         schema: {
           params: userIdParamSchema,
         },

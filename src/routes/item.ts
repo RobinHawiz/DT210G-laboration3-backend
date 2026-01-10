@@ -7,6 +7,7 @@ import {
 } from "@schemas/item.js";
 import { ItemPayload } from "@models/item.js";
 import { ItemController } from "@controllers/item.js";
+import { authenticateToken } from "@hooks/authenticateToken.js";
 
 export interface ItemRoutes {
   initRoutes(app: FastifyInstance): void;
@@ -21,14 +22,23 @@ export class DefaultItemRoutes implements ItemRoutes {
 
   initRoutes(app: FastifyInstance) {
     // Fetches all available items
-    app.get("/api/items", (_, reply) => {
-      this.controller.getAllItems(reply);
-    });
+    app.get(
+      "/api/items",
+      {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
+      },
+      (_, reply) => {
+        this.controller.getAllItems(reply);
+      }
+    );
 
     // Fetches one item by a given id after validating the query parameter
     app.get<{ Params: { id: string } }>(
       "/api/items/:id",
       {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
         schema: {
           params: itemIdParamSchema,
         },
@@ -42,6 +52,8 @@ export class DefaultItemRoutes implements ItemRoutes {
     app.post<{ Body: ItemPayload }>(
       "/api/items",
       {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
         schema: {
           body: itemPayloadSchema,
         },
@@ -55,6 +67,8 @@ export class DefaultItemRoutes implements ItemRoutes {
     app.put<{ Params: { id: string }; Body: ItemPayload }>(
       "/api/items/:id",
       {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
         schema: {
           params: itemIdParamSchema,
           body: itemPayloadSchema,
@@ -69,6 +83,8 @@ export class DefaultItemRoutes implements ItemRoutes {
     app.delete<{ Params: { id: string } }>(
       "/api/items/:id",
       {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
         schema: {
           params: itemIdParamSchema,
         },
@@ -82,6 +98,8 @@ export class DefaultItemRoutes implements ItemRoutes {
     app.patch<{ Params: { id: string }; Body: { amount: number } }>(
       "/api/items/:id",
       {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
         schema: {
           params: itemIdParamSchema,
           body: itemChangeAmountSchema,
