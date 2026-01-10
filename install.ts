@@ -25,6 +25,12 @@ try {
         amount INTEGER NOT NULL
         );`);
 
+  db.exec(`CREATE TABLE user(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL,
+        password_hash TEXT NOT NULL
+        );`);
+
   db.exec(
     `insert into item (name, description, price, image_url, amount) values ('Drake', 'En förödande varelse!', '14.90', 'No url', '100')`
   );
