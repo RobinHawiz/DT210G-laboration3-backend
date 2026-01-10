@@ -1,5 +1,6 @@
 // Load environment variables
 import "./src/config/env.js";
+import bcrypt from "bcrypt";
 
 import DatabaseConstructor, { Database } from "better-sqlite3";
 
@@ -25,15 +26,26 @@ try {
         amount INTEGER NOT NULL
         );`);
 
+  db.exec(
+    `insert into item (name, description, price, image_url, amount) values ('Drake', 'En förödande varelse!', '14.90', 'No url', '100')`
+  );
+
+  // Create table user
+  db.exec("drop table if exists user;");
+
   db.exec(`CREATE TABLE user(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL,
         password_hash TEXT NOT NULL
         );`);
 
-  db.exec(
-    `insert into item (name, description, price, image_url, amount) values ('Drake', 'En förödande varelse!', '14.90', 'No url', '100')`
-  );
+  let username = "mmbullar";
+  let passwordHash = await bcrypt.hash("jagharbakatbullar", 10);
+
+  db.prepare(
+    `insert into user (username, password_hash)
+              values(@username, @passwordHash)`
+  ).run({ username, passwordHash });
 
   console.log("DB initialized at:", dbPath);
 } catch (e) {
