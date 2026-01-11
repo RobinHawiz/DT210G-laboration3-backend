@@ -92,6 +92,14 @@ Auth errors:
 
 `POST /api/users/login` returns a JWT string (expires in **1 hour**).
 
+### Validate token
+
+`GET /api/auth` validates the JWT and returns:
+- `200 OK` if the token is valid
+- `401/403` if the token is missing/invalid
+
+The response body is empty (status code only).
+
 ### Seeded login (after `npm run db:init`)
 
 The init script inserts one user:
@@ -126,6 +134,12 @@ SQLite handles persistence, while validation and data constraints are enforced a
 > Passwords are always stored as a bcrypt hash in the `password_hash` column.
 
 ## API Endpoints
+
+### Auth
+
+| Method | Route        | Protected | Description        | Body / Params | Responses |
+|--------|--------------|:---------:|--------------------|---------------|----------|
+| GET    | `/api/auth`  | Yes       | Validate JWT token | None          | `200 OK` • `401/403` • `500` |
 
 ### User
 
