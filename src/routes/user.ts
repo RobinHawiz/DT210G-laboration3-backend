@@ -30,6 +30,18 @@ export class DefaultUserRoutes implements UserRoutes {
       }
     );
 
+    // Validates the JWT
+    app.get(
+      "/api/auth",
+      {
+        onRequest: (request, reply, done) =>
+          authenticateToken(request, reply, done),
+      },
+      (_, reply) => {
+        reply.code(200).send();
+      }
+    );
+
     // Fetches all available users
     app.get(
       "/api/users",
