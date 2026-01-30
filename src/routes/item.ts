@@ -22,30 +22,21 @@ export class DefaultItemRoutes implements ItemRoutes {
 
   initRoutes(app: FastifyInstance) {
     // Fetches all available items
-    app.get(
-      "/api/items",
-      {
-        onRequest: (request, reply, done) =>
-          authenticateToken(request, reply, done),
-      },
-      (_, reply) => {
-        this.controller.getAllItems(reply);
-      }
-    );
+    app.get("/api/items", (_, reply) => {
+      this.controller.getAllItems(reply);
+    });
 
     // Fetches one item by a given id after validating the query parameter
     app.get<{ Params: { id: string } }>(
       "/api/items/:id",
       {
-        onRequest: (request, reply, done) =>
-          authenticateToken(request, reply, done),
         schema: {
           params: itemIdParamSchema,
         },
       },
       (request, reply) => {
         this.controller.getOneItem(request, reply);
-      }
+      },
     );
 
     // Inserts an item after validating the request body
@@ -60,7 +51,7 @@ export class DefaultItemRoutes implements ItemRoutes {
       },
       (request, reply) => {
         this.controller.insertItem(request, reply);
-      }
+      },
     );
 
     // Updates an existing item after validating the query parameter and request body
@@ -76,7 +67,7 @@ export class DefaultItemRoutes implements ItemRoutes {
       },
       (request, reply) => {
         this.controller.updateItem(request, reply);
-      }
+      },
     );
 
     // Deletes an existing item after validating the query parameter
@@ -91,7 +82,7 @@ export class DefaultItemRoutes implements ItemRoutes {
       },
       (request, reply) => {
         this.controller.deleteItem(request, reply);
-      }
+      },
     );
 
     // Adjusts an existing item amount after validating the query parameter and request body
@@ -107,7 +98,7 @@ export class DefaultItemRoutes implements ItemRoutes {
       },
       (request, reply) => {
         this.controller.changeItemAmount(request, reply);
-      }
+      },
     );
   }
 }
