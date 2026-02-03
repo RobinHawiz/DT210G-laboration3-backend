@@ -8,29 +8,29 @@ export interface UserController {
   /** POST /api/users/login → 200, 400 bad request, 500 internal server error */
   loginUser(
     request: FastifyRequest<{ Body: UserPayload }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ): void;
   /** GET /api/users → 200 */
   getAllUsers(reply: FastifyReply): void;
   /** GET /api/users/:id → 200, 400 bad request, 500 internal server error */
   getOneUser(
     request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ): void;
   /** POST /api/users → 201, 400 bad request, 500 internal server error */
   insertUser(
     request: FastifyRequest<{ Body: UserPayload }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ): void;
   /** PUT /api/users/:id → 204, 400 bad request, 500 internal server error */
   updateUser(
     request: FastifyRequest<{ Params: { id: string }; Body: UserPayload }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ): void;
   /** DELETE /api/users/:id → 204, 400 bad request, 500 internal server error */
   deleteUser(
     request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ): void;
 }
 
@@ -43,11 +43,11 @@ export class DefaultUserController implements UserController {
 
   async loginUser(
     request: FastifyRequest<{ Body: UserPayload }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ) {
     try {
       const token = await this.service.loginUser(request.body);
-      reply.code(200).send(token);
+      reply.code(200).send({ token });
     } catch (err) {
       if (err instanceof DomainError) {
         console.error("Error authenticating admin user:", err.message);
@@ -71,7 +71,7 @@ export class DefaultUserController implements UserController {
 
   getOneUser(
     request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ) {
     try {
       const { id } = request.params;
@@ -90,7 +90,7 @@ export class DefaultUserController implements UserController {
 
   async insertUser(
     request: FastifyRequest<{ Body: UserPayload }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ) {
     try {
       const id = await this.service.insertUser(request.body);
@@ -108,7 +108,7 @@ export class DefaultUserController implements UserController {
 
   updateUser(
     request: FastifyRequest<{ Params: { id: string }; Body: UserPayload }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ) {
     try {
       const { id } = request.params;
@@ -128,7 +128,7 @@ export class DefaultUserController implements UserController {
 
   deleteUser(
     request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply
+    reply: FastifyReply,
   ) {
     try {
       const { id } = request.params;
