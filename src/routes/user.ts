@@ -27,7 +27,7 @@ export class DefaultUserRoutes implements UserRoutes {
       },
       (request, reply) => {
         this.controller.loginUser(request, reply);
-      }
+      },
     );
 
     // Validates the JWT
@@ -38,8 +38,8 @@ export class DefaultUserRoutes implements UserRoutes {
           authenticateToken(request, reply, done),
       },
       (_, reply) => {
-        reply.code(200).send();
-      }
+        reply.code(204).send();
+      },
     );
 
     // Fetches all available users
@@ -51,7 +51,7 @@ export class DefaultUserRoutes implements UserRoutes {
       },
       (_, reply) => {
         this.controller.getAllUsers(reply);
-      }
+      },
     );
 
     // Fetches one user by a given id after validating the query parameter
@@ -66,7 +66,7 @@ export class DefaultUserRoutes implements UserRoutes {
       },
       (request, reply) => {
         this.controller.getOneUser(request, reply);
-      }
+      },
     );
 
     // Inserts a user after validating the request body
@@ -81,7 +81,7 @@ export class DefaultUserRoutes implements UserRoutes {
       },
       (request, reply) => {
         this.controller.insertUser(request, reply);
-      }
+      },
     );
 
     // Updates an existing user after validating the query parameter and request body
@@ -97,7 +97,7 @@ export class DefaultUserRoutes implements UserRoutes {
       },
       (request, reply) => {
         this.controller.updateUser(request, reply);
-      }
+      },
     );
 
     // Deletes an existing user after validating the query parameter
@@ -112,7 +112,7 @@ export class DefaultUserRoutes implements UserRoutes {
       },
       (request, reply) => {
         this.controller.deleteUser(request, reply);
-      }
+      },
     );
   }
 }
